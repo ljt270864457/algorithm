@@ -1,2 +1,3 @@
 # algorithm
-trivial algorithm
+## 1 文本处理
+### 1.1 最大公共子序列
