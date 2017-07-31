@@ -1,0 +1,2 @@
+# algorithm
+trivial algorithm
