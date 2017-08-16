@@ -48,9 +48,9 @@ class KNN(object):
         '''
         print 'fiting ......'
         result_list = []       
-        for i in range(self.test_rows):            
+        for i,row in self.test_x.iterrows():       
             self.train_x['distance'] = self.train_x.apply(
-                lambda x: (sum((x - self.test_x.iloc[i])**2)**0.5), axis=1)
+                lambda x: (sum((row - self.test_x.loc[i])**2)**0.5), axis=1)
             top_K = self.train_x.sort_values(['distance']).iloc[:self.K,]
             tags = list(self.train_y[list(top_K.index)])
             result_tag = Counter(tags).most_common(1)
