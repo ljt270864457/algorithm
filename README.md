@@ -4,3 +4,7 @@
 
 ### 2 分类算法
 #### 2.1[KNN算法](https://github.com/ljt270864457/algorithm/blob/master/2.classfy/KNN/knn.py)
+
+### others
+#### [布隆过滤器](https://github.com/ljt270864457/algorithm/blob/master/others/bloomFilter.py)
+
