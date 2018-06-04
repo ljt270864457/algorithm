@@ -4,6 +4,7 @@ from __future__ import division
 import pandas as pd
 from collections import Counter
 
+
 class Preprossing(object):
     def __init__(self, data_path, train_percent):
         print 'data preprossing...'
@@ -20,7 +21,7 @@ class Preprossing(object):
         '''
         df.iloc[:, -1] = df.iloc[:, -1].apply(lambda x: 1 if x == 'g' else 0)
         df.iloc[:, :-1] = df.iloc[:, :-1].apply(lambda x: (x - x.min()) / (x.max() -
-                      x.min()) if x.max() != x.min() else x)
+                                                                           x.min()) if x.max() != x.min() else x)
         return df
 
     def splitData(self, df):
@@ -39,36 +40,37 @@ class KNN(object):
         self.test_x = test_x
         self.test_y = test_y
         self.K = K
-        self.train_rows=self.train_x.shape[0]
-        self.test_rows=self.test_x.shape[0]
+        self.train_rows = self.train_x.shape[0]
+        self.test_rows = self.test_x.shape[0]
 
     def fit(self):
         '''
         使用欧氏距离进行计算,返回排序之后的距离
         '''
         print 'fiting ......'
-        result_list = []       
-        for i,row in self.test_x.iterrows():       
+        result_list = []
+        for i, row in self.test_x.iterrows():
             self.train_x['distance'] = self.train_x.apply(
-                lambda x: (sum((row - self.test_x.loc[i])**2)**0.5), axis=1)
-            top_K = self.train_x.sort_values(['distance']).iloc[:self.K,]
+                lambda x: (sum((row - self.test_x.loc[i]) ** 2) ** 0.5), axis=1)
+            top_K = self.train_x.sort_values(['distance']).iloc[:self.K, ]
             tags = list(self.train_y[list(top_K.index)])
             result_tag = Counter(tags).most_common(1)
             result_list.append(result_tag[0][0])
-        result_dataFrame = pd.DataFrame({'actual':list(self.test_y),'predict':result_list})
+        result_dataFrame = pd.DataFrame({'actual': list(self.test_y), 'predict': result_list})
         return result_dataFrame
 
-    def validate(self,df):
-        new_df=df[df['actual']==df['predict']]
+    def validate(self, df):
+        new_df = df[df['actual'] == df['predict']]
         correct_count = new_df.shape[0]
-        accuracy = (correct_count/self.test_rows)*100
-        print 'accuracy percent is {0}%'.format(round(accuracy,2))
+        accuracy = (correct_count / self.test_rows) * 100
+        print 'accuracy percent is {0}%'.format(round(accuracy, 2))
+
 
 if __name__ == '__main__':
-    data_reader= Preprossing('./ionosphere.data', 0.7)
-    data= data_reader.readData()
-    cleanedData= data_reader.cleanData(data)
-    train_x, test_x, train_y, test_y= data_reader.splitData(cleanedData)
+    data_reader = Preprossing('./ionosphere.data', 0.7)
+    data = data_reader.readData()
+    cleanedData = data_reader.cleanData(data)
+    train_x, test_x, train_y, test_y = data_reader.splitData(cleanedData)
     knn = KNN(train_x, train_y, test_x, test_y)
     df = knn.fit()
     print df
