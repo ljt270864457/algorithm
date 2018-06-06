@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 # @Time    : 2018/6/4 下午10:12
 # @Author  : liujiatian
-# @File    : id3.py
+# @File    : decisionTree.py
 
 from __future__ import division
 
@@ -41,9 +41,44 @@ def calcShannonEnt(dataSet):
     return entropy
 
 
-def chooseFeature(dataSet):
+def chooseFeatureByInfoGain(dataSet):
     '''
-    选择最佳分裂维度
+    ID3
+    根据最大信息增益选择最佳分裂维度
+    :param dataSet:
+    :return: 维度的序数
+    '''
+    if dataSet.empty:
+        return
+
+    baseEntropy = calcShannonEnt(dataSet)
+    bestInfoGain = 0.0
+    bestFeature = -1
+    featureCount = dataSet.shape[1] - 1
+    dataSetRows = len(dataSet)
+
+    # 维度的数量
+    for i in range(featureCount):
+        # 不同元素
+        uniqueVals = set(list(dataSet.iloc[:, i]))
+        splitInfo = 0.0
+        for value in uniqueVals:
+            subDataFrame = dataSet[dataSet.iloc[:, i] == value]
+            subDataFrameRows = len(subDataFrame)
+            prob = subDataFrameRows / dataSetRows
+            splitInfo += prob * calcShannonEnt(subDataFrame)
+        infoGain = baseEntropy - splitInfo
+        print u'第%s列信息增益是：%s' % (i, infoGain)
+        if infoGain > bestInfoGain:
+            bestInfoGain = infoGain
+            bestFeature = i
+    return bestFeature
+
+
+def chooseFeatureByInfoGainRatio(dataSet):
+    '''
+    C4.5
+    根据最大信息增益率选择最佳分裂维度
     :param dataSet:
     :return: 维度的序数
     '''
@@ -67,8 +102,9 @@ def chooseFeature(dataSet):
             prob = subDataFrameRows / dataSetRows
             splitInfo += prob * calcShannonEnt(subDataFrame)
         infoGain = baseEntropy - splitInfo
-        print u'第%s列信息增益是：%s' % (i, infoGain)
-        if infoGain > bestInfoGainRatio:
+        infoGainRatio = infoGain / baseEntropy
+        print u'第%s列信息增益率是：%s' % (i, infoGainRatio)
+        if infoGainRatio > bestInfoGainRatio:
             bestInfoGainRatio = infoGain
             bestFeature = i
     return bestFeature
@@ -89,7 +125,10 @@ def createTree(dataSet):
         target = dataSet.iloc[:, -1].mode()[0]
         return target
 
-    bestFeatureIndex = chooseFeature(dataSet)
+    # ID3
+    # bestFeatureIndex = chooseFeatureByInfoGain(dataSet)
+    # C4.5
+    bestFeatureIndex = chooseFeatureByInfoGainRatio(dataSet)
     bestFeature = dataSet.columns[bestFeatureIndex]
     myTree = {bestFeature: {}}
     for item, subDataSet in dataSet.groupby(bestFeature):
