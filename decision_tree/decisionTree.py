@@ -67,6 +67,7 @@ def chooseFeatureByInfoGain(dataSet):
             subDataFrameRows = len(subDataFrame)
             prob = subDataFrameRows / dataSetRows
             splitInfo += prob * calcShannonEnt(subDataFrame)
+        print u'第%s列信息熵是：%s' % (i, splitInfo)
         infoGain = baseEntropy - splitInfo
         print u'第%s列信息增益是：%s' % (i, infoGain)
         if infoGain > bestInfoGain:
@@ -126,9 +127,9 @@ def createTree(dataSet):
         return target
 
     # ID3
-    # bestFeatureIndex = chooseFeatureByInfoGain(dataSet)
+    bestFeatureIndex = chooseFeatureByInfoGain(dataSet)
     # C4.5
-    bestFeatureIndex = chooseFeatureByInfoGainRatio(dataSet)
+    # bestFeatureIndex = chooseFeatureByInfoGainRatio(dataSet)
     bestFeature = dataSet.columns[bestFeatureIndex]
     myTree = {bestFeature: {}}
     for item, subDataSet in dataSet.groupby(bestFeature):
