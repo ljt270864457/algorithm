@@ -12,6 +12,9 @@
 ### gradientDescent
 #### [批量梯度下降](https://github.com/ljt270864457/algorithm/blob/master/gradient_decent/gd.py)
 
+### bayes
+#### [贝叶斯](https://github.com/ljt270864457/algorithm/blob/master/bayes/bayes.md)
+
 ### others
 #### [布隆过滤器](https://github.com/ljt270864457/algorithm/blob/master/others/bloomFilter.py)
 
