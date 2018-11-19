@@ -48,17 +48,16 @@ def gradientDecent(x_list, y_list):
     assert len(x_list) == len(y_list)
 
     for i in range(iterCount):
-        delta_a = 0.0
-        delta_b = 0.0
+        delta = 0.0
         costFunctionValue = 0.0
+        # 计算残差
         for j in range(pointCount):
-            delta_a += a * x_list[j] + b - y_list[j]
-            delta_b += a * x_list[j] + b - y_list[j]
+            delta += a * x_list[j] + b - y_list[j]
             costFunctionValue += (x_list[j] * a + b - y_list[j]) ** 2
         costFunctionValue = costFunctionValue / 2 / pointCount
         costDict[i] = costFunctionValue
-        delta_a = delta_a / pointCount * x_list[j]
-        delta_b = delta_b / pointCount
+        delta_a = delta / pointCount * x_list[j]
+        delta_b = delta / pointCount
         a -= delta_a * alpha
         b -= delta_b * alpha
 
