@@ -91,3 +91,14 @@ if __name__ == '__main__':
     a, b, costDict = gradientDecent(x_list, y_list)
     draw(x_list, y_list, a, b)
     drawCostFunc(costDict)
+    import numpy as np
+
+    x_list = np.array(x_list).reshape((-1, 1))
+    y_list = np.array(y_list).reshape((-1, 1))
+    print x_list
+    print '==========='
+    print y_list
+    diff_list = 5 * x_list + 3 - y_list
+    print '==========='
+    print diff_list
+    # a = np.array([x_list, y_list]).reshape((-1, 2))
